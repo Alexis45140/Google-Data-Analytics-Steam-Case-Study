@@ -1,45 +1,35 @@
-# 🎮 Étude de Cas : Analyse du Marché Steam (2026)
-### *Projet réalisé pour le Certificat Professionnel Google Data Analytics*
+***
 
-## 📌 1. PHASE : ASK (Poser les questions)
-**Objectif :** Aider un studio indépendant à identifier les opportunités de succès sur Steam.
-* **Question de recherche 1 :** Quelles combinaisons de genres affichent les meilleurs taux de satisfaction (Success Rate) ?
-* **Question de recherche 2 :** Existe-t-il un "prix idéal" qui maximise l'approbation des joueurs ?
+```markdown
+# 🎮 Étude de Cas : Analyse du Marché Steam (Certificat Google Data Analytics)
 
----
-
-## 📥 2. PHASE : PREPARE (Préparer)
-* **Dataset :** Données extraites de l'API Steam (format CSV).
-* **Outils :** * **SQL (MySQL) :** Pour le nettoyage lourd et l'analyse statistique.
-    * **VS Code :** Pour l'organisation des scripts et la rédaction Markdown.
-    * **Google Sheets :** Pour la visualisation des tendances.
+## 📌 Présentation du Projet
+Ce projet est le point culminant de mon certificat professionnel **Google Data Analytics**. L'objectif est d'analyser les données de la plateforme Steam pour aider un studio de développement à prendre des décisions basées sur les données concernant le genre de leur futur jeu et sa stratégie de prix.
 
 ---
 
-## 🧹 3. PHASE : PROCESS (Nettoyer)
-Le dataset brut présentait des incohérences majeures que j'ai corrigées via SQL.
+## 🛠️ Phase 1 : ASK (Poser les questions)
+**Problématique :** Comment maximiser le succès critique d'un jeu indépendant ?
+* Quelles combinaisons de genres affichent les meilleurs taux de satisfaction ?
+* Existe-t-il une corrélation entre le prix de vente et la note des utilisateurs ?
 
-### A. Normalisation des Dates
-Les dates étaient au format texte ISO. Je les ai converties en type `DATE` pour permettre les analyses temporelles.
+---
+
+## 📥 Phase 2 : PREPARE (Préparer)
+* **Source :** Dataset public Steam (données brutes via API).
+* **Outils :** * **SQL (MySQL)** : Pour le nettoyage massif et les agrégations.
+    * **R (Tidyverse)** : Pour l'analyse statistique et la visualisation de données.
+
+---
+
+## 🧹 Phase 3 : PROCESS (Nettoyer)
+Le nettoyage a été effectué en SQL pour garantir l'intégrité des données :
+- **Normalisation des dates :** Conversion des chaînes de caractères au format `DATE`.
+- **Nettoyage des colonnes :** Suppression des résidus de formatage Python (`[' ']` dans les genres).
+- **Création de KPIs :** Calcul du `success_rate` (ratio avis positifs / total).
+
 ```sql
-UPDATE games_cleaned 
-SET release_date_fixed = CAST(release_date AS DATE)
-WHERE release_date REGEXP '^[0-9]{4}-[0-9]{2}-[0-9]{2}$';
-```
-
-### B. Nettoyage des résidus de listes (String Cleaning)
-Suppression des crochets `[' ']` hérités de l'export Python dans les colonnes `genres` et `developers`.
-```sql
-UPDATE games_cleaned 
-SET developers = REPLACE(REPLACE(REPLACE(developers, "['", ""), "']", ""), "'", ""),
-    genres = REPLACE(REPLACE(REPLACE(genres, "['", ""), "']", ""), "'", "");
-```
-
-### C. Calcul des KPIs (Indicateurs de Performance)
-Création d'une métrique de satisfaction normalisée.
-```sql
-ALTER TABLE games_cleaned ADD COLUMN success_rate DECIMAL(5,2);
-
+-- Calcul du Success Rate par jeu
 UPDATE games_cleaned 
 SET success_rate = (positive / (positive + negative)) * 100
 WHERE (positive + negative) > 0;
@@ -47,40 +37,35 @@ WHERE (positive + negative) > 0;
 
 ---
 
-## 📊 4. PHASE : ANALYZE (Analyser)
+## 📊 Phase 4 : ANALYZE (Analyser)
 
-### A. Analyse de la Satisfaction par Genre
-Les données montrent que les genres de niche hybrides sur-performent les genres généralistes :
+### 1. Analyse des Genres (SQL)
+L'analyse montre que les niches hybrides (ex: **Action + Indie + Racing**) sur-performent avec un taux de satisfaction moyen de **77.02%**, contre 65% pour les jeux d'action classiques.
 
-| Mix de Genres | Nombre de Jeux | Satisfaction Moyenne |
-| :--- | :--- | :--- |
-| **Action, Indie, Racing** | 172 | **77.02%** |
-| **Action, Casual, Indie, Sports** | 154 | **73.32%** |
-| **Action, Indie, Sports** | 143 | **73.24%** |
-| **Indie, RPG, Strategy** | 401 | **73.12%** |
-
-### B. Analyse de la Cohérence Prix / Score
-* **Jeux Gratuits :** Volume élevé, mais satisfaction très variable.
-* **Jeux Mid-range (10-30€) :** Offrent la meilleure stabilité de notes, suggérant une qualité de production supérieure et une communauté plus engagée.
+### 2. Visualisation Statistique (R)
+J'ai utilisé R pour tester la corrélation entre le prix et la satisfaction.
+```r
+ggplot(data, aes(x = price, y = success_rate)) +
+  geom_jitter(alpha = 0.3) +
+  geom_smooth(method = "lm") +
+  labs(title = "Corrélation Prix vs Satisfaction")
+```
+*Insight : Les jeux situés entre 15€ et 25€ affichent une satisfaction plus stable, suggérant une meilleure perception de la qualité par les joueurs.*
 
 ---
 
-## 📈 5. PHASE : SHARE & ACT (Partager et Agir)
-
-### Insights Clés :
-1.  **Potentiel de Niche :** Les jeux hybrides mélangeant **Action** et **Sports/Racing** sont moins nombreux sur le marché mais reçoivent systématiquement de meilleures notes que les "Action" purs.
-2.  **Stratégie Tarifaire :** Un prix situé entre **14.99€ et 24.99€** semble être le "sweet spot" pour signaler la qualité tout en restant accessible aux joueurs indépendants.
+## 📈 Phase 5 : SHARE & ACT (Agir)
 
 ### Recommandations Business :
-* **Développement :** Privilégier un jeu hybride (ex: Action-Sports) pour éviter la saturation des genres classiques.
-* **Lancement :** Adopter une tarification Premium modérée pour favoriser les avis positifs dès la sortie.
+1. **Ciblage :** Développer un jeu hybride (Action/Sports) plutôt qu'un genre saturé.
+2. **Pricing :** Adopter un prix "Mid-range" (14.99€ - 24.99€) pour maximiser les avis positifs tout en rentabilisant le projet.
 
 ---
 
-## 📁 Fichiers du Projet
-* `clean_data.sql` : Scripts de nettoyage complets.
-* `analysis_queries.sql` : Requêtes d'analyse de marché.
+## 📁 Structure du Repository
+- `cleaning_scripts.sql` : Script de nettoyage complet.
+- `visualization_analysis.R` : Script d'analyse statistique R.
+- `games_cleaned.csv` : Dataset final utilisé pour l'analyse.
 
-**Contact :** [Ton Nom] – [Lien LinkedIn]
-```
-
+**Auteur :** [Ton Nom]
+**Certificat :** Google Data Analytics (2026)
