@@ -1,6 +1,3 @@
-***
-
-```markdown
 # 🎮 Étude de Cas : Analyse du Marché Steam (Certificat Google Data Analytics)
 
 ## 📌 Présentation du Projet
@@ -69,3 +66,6 @@ ggplot(data, aes(x = price, y = success_rate)) +
 
 **Auteur :** [Ton Nom]
 **Certificat :** Google Data Analytics (2026)
+
+
+
