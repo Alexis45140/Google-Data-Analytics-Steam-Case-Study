@@ -78,10 +78,11 @@ ggplot(data = steam_data, aes(x = price, y = success_rate)) +
 
 ---
 
-## 📁 Fichiers du projet
-* `cleaning_and_analysis.sql` : Scripts de nettoyage SQL.
-* `visualisation_stats.R` : Script d'analyse R.
-* `graphique_final_steam.png` : Visualisation finale.
+## 📁 Structure du Repository
+* `cleaning_and_analysis.sql` : Scripts de nettoyage et agrégation SQL.
+* `visualisation_stats.R` : Script d'analyse et de visualisation R.
+* `visualisation/` : Dossier contenant les exports graphiques (PNG).
+* `games_cleaned.csv` : Dataset final après traitement.
 
 ---
 ## 📬 Contact
