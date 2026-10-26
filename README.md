@@ -76,6 +76,9 @@ ggplot(data = steam_data, aes(x = price, y = success_rate)) +
 * **Développement :** S'orienter vers un jeu hybride (Action/Indie/Racing).
 * **Prix :** Fixer un prix de lancement à **19.99€** pour se positionner dans la zone de haute satisfaction.
 
+### Limite :
+* Le Success Rate mesure la part d'avis positifs, pas les ventes, et une corrélation entre prix et satisfaction ne prouve pas qu'un prix de 19,99 € amènerait de meilleurs avis.
+
 ---
 
 ## 📁 Structure du Repository
@@ -86,7 +89,7 @@ ggplot(data = steam_data, aes(x = price, y = success_rate)) +
 
 ---
 ## 📬 Contact
-[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)]([https://www.linkedin.com/in/TON-PROFIL-ICI/](https://www.linkedin.com/in/alexis-claudeon/))
+[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alexis-claudeon/)
 
 **Nom :** Claudeon Alexis  
 **Projet :** Certificat Google Data Analytics (2026)
